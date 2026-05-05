@@ -1,0 +1,11 @@
+services:
+  life-weave-os:
+    build:
+      context: .
+    ports:
+      - "8000:8000"
+    environment:
+      LIFE_OS_DATA_DIR: /app/data
+    volumes:
+      - ./data:/app/data
+    restart: unless-stopped

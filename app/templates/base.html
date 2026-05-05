@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+    <meta charset='utf-8'>
+    <meta name='viewport' content='width=device-width, initial-scale=1'>
+    <title>{{ title or 'Life Weave OS' }}</title>
+    <link rel='stylesheet' href='/static/style.css'>
+    <script defer src='/static/app.js'></script>
+</head>
+<body>
+    <header class='hero'>
+        <div>
+            <p class='eyebrow'>Local-first life operating system</p>
+            <h1>Life Weave OS</h1>
+            <p class='subtitle'>A personal dashboard that fuses life analytics with unified personal data management.</p>
+        </div>
+        <div class='hero-actions'>
+            <a class='ghost-button' href='/api/dashboard'>Open dashboard JSON</a>
+            <a class='ghost-button' href='/docs'>API docs</a>
+        </div>
+    </header>
+    <main>
+        {% block content %}{% endblock %}
+    </main>
+</body>
+</html>
