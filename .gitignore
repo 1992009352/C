@@ -1,0 +1,16 @@
+__pycache__/
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+*.pyc
+*.pyo
+*.py[cod]
+*.sqlite3
+*.db
+data/
+.env
+.DS_Store
+.venv/
+venv/
+dist/
+node_modules/

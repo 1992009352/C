@@ -1,0 +1,17 @@
+services:
+  life-os:
+    build: .
+    container_name: superpower-life-os
+    ports:
+      - "8000:8000"
+    environment:
+      APP_HOST: 0.0.0.0
+      APP_PORT: 8000
+      DATA_DIR: /app/data
+      DATABASE_PATH: /app/data/life_os.sqlite3
+      TZ: Asia/Shanghai
+      # Replace this before storing real passwords.
+      PASSWORD_SECRET: change-me-local-secret
+    volumes:
+      - ./data:/app/data
+    restart: unless-stopped

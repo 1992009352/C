@@ -1,0 +1,14 @@
+[project]
+name = "superpower-life-os"
+version = "0.1.0"
+description = "Docker-friendly personal life management system inspired by Mulanbay and PMS."
+requires-python = ">=3.12"
+dependencies = []
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["."]
+
+[tool.ruff]
+line-length = 100
+target-version = "py312"
