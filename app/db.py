@@ -8,8 +8,7 @@ import json
 import sqlite3
 from collections.abc import Iterator
 from contextlib import contextmanager
-from datetime import date, datetime, timedelta
-from pathlib import Path
+from datetime import UTC, date, datetime, timedelta
 from typing import Any
 
 from app.config import settings
@@ -17,7 +16,7 @@ from app.models import MODULES, SCORE_WEIGHTS, normalize_record_payload
 
 
 def utc_now() -> str:
-    return datetime.utcnow().replace(microsecond=0).isoformat() + "Z"
+    return datetime.now(UTC).replace(microsecond=0).isoformat().replace("+00:00", "Z")
 
 
 def today_iso() -> str:
@@ -279,7 +278,7 @@ def build_insights(conn: sqlite3.Connection) -> list[str]:
         """,
         ((date.today() - timedelta(days=30)).isoformat(),),
     ).fetchall()
-    totals = {row["module"]: row for row in rows}
+    totals = {row["module"]: {"total": row["total"], "score": row["score"]} for row in rows}
     insights: list[str] = []
     if totals.get("expense", {}).get("total", 0) > totals.get("exercise", {}).get("total", 0) + 5:
         insights.append("近 30 天消费记录明显多于运动记录，建议设置每周运动提醒来平衡生活评分。")
@@ -364,6 +363,15 @@ def reveal_secret(secret: str) -> str:
     data = base64.urlsafe_b64decode(secret.encode("ascii"))
     decoded = bytes(char ^ key[index % len(key)] for index, char in enumerate(data))
     return decoded.decode("utf-8")
+
+
+def reveal_record_secret(conn: sqlite3.Connection, record_id: int) -> str | None:
+    row = conn.execute("SELECT module, details FROM records WHERE id = ?", (record_id,)).fetchone()
+    if not row or row["module"] != "password":
+        return None
+    details = json.loads(row["details"] or "{}")
+    encrypted = details.get("secret")
+    return reveal_secret(str(encrypted)) if encrypted else None
 
 
 def row_to_record(row: sqlite3.Row) -> dict[str, Any]:
